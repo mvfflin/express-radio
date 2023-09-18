@@ -9,7 +9,6 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server);
 
-app.use(express.urlencoded());
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 
