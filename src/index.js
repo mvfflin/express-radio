@@ -17,8 +17,29 @@ app.get("/", (req, res) => {
   return res.render("index");
 });
 
+app.get("/caster", (req, res) => {
+  return res.render("caster");
+});
+
+app.get("/listener", (req, res) => {
+  return res.render("listener");
+});
+
+let userCounter = 0;
+
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  userCounter = userCounter + 1;
+  io.emit("user", userCounter);
+  console.log("a user connected, total user :", userCounter);
+  socket.on("disconnect", () => {
+    userCounter = userCounter - 1;
+    io.emit("user", userCounter);
+    console.log("a user disconnected");
+  });
+
+  socket.on("voiceChat", (msg) => {
+    io.emit("voiceChat", msg);
+  });
 });
 
 server.listen(process.env.PORT, () => {

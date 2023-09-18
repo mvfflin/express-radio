@@ -5,10 +5,50 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>express-radio</title>
+  <!-- Tailwind css cdn -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fontawesome cdn -->
+  <script src="https://kit.fontawesome.com/b52d0fc4c6.js" crossorigin="anonymous"></script>
 </head>
 
-<body>
-  <h1>Welcome to express-radio</h1>
+<body class="bg-zinc-900">
+  <div class="w-full text-center mx-auto px-5 mt-[200px]">
+    <h1 class="text-white text-7xl">express-radio</h1>
+    <h1 class="text-white text-3xl my-5">An express proxy radio</h1>
+    <h1 class="text-white text-xl my-5">You can broadcast from your mic to anyone who opens the listener of this website</h1>
+    <h1 class="text-white text-md my-5">Authors</h1>
+    <div class="grid grid-cols-2 gap-4 mx-auto w-max mb-10">
+      <div class="bg-zinc-950 p-5 w-max rounded-md text-center">
+        <img src="https://github.com/mvfflin.png" class="w-[100px] h-[100px] rounded-full" />
+        <br />
+        <a href="https://github.com/mvfflin" class="text-white text-lg font-semibold">mvfflin</a>
+        <h1 class="text-white ">as Developer</h1>
+      </div>
+      <div class="bg-zinc-950 p-5 w-max rounded-md text-center">
+        <img src="https://github.com/WillisRH.png" class="w-[100px] h-[100px] rounded-full" />
+        <br />
+        <a href="https://github.com/WillisRH" class="text-white text-lg font-semibold">WillisRH</a>
+        <h1 class="text-white ">as Founder <br />& Developer</h1>
+      </div>
+    </div>
+    <div class="mb-[150px]">
+      <a href="/caster" class="text-white text-xl bg-zinc-950 p-3 px-7 rounded-md mx-2 w-[100px] hover:drop-shadow-[0_0px_5px_rgba(255,255,255)] active:ring-4 focus:ring-4"><i class="fa-solid fa-microphone"></i> Caster</a>
+      <a href="/listener" class="text-white text-xl bg-zinc-950 p-3 px-7 rounded-md mx-2 w-[100px] hover:drop-shadow-[0_0px_5px_rgba(255,255,255)] active:ring-4 focus:ring-4"><i class="fa-solid fa-headphones"></i> Listener</a>
+    </div>
+  </div>
+
+
+  <!-- scripts -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script>
+    var socket = io()
+
+    socket.on("user", (userCount) => {
+      console.log("user count :", userCount)
+      $('.usercount').text(userCount)
+    })
+  </script>
 </body>
 
 </html>

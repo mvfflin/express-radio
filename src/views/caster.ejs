@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Tailwind css cdn -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fontawesome cdn -->
+  <script src="https://kit.fontawesome.com/b52d0fc4c6.js" crossorigin="anonymous"></script>
+  <title>Caster</title>
+</head>
+
+<body class="bg-zinc-900">
+  <div class="w-full text-center mx-auto mt-[150px] md:mt-[200px] px-5">
+    <h1 class="text-white text-3xl">Send message with your microphone!</h1>
+    <h1 class="text-white text-xl my-2">Click to toggle! (Blinking = on)</h1>
+    <div class="microphone bg-zinc-950 w-max mx-auto p-10 px-12 my-5 rounded-full cursor-pointer hover:drop-shadow-[0_0px_5px_rgba(255,255,255)] active:ring-4 focus:ring-4">
+      <i class="text-7xl text-white fa-solid fa-microphone"></i>
+    </div>
+    <h1 class="text-white text-xl bg-zinc-950 w-max mx-auto p-5 rounded-md mb-7">Total user online : <span class="usercount"></span></h1>
+    <a class="text-white text-lg bg-zinc-950 p-3 rounded-md hover:drop-shadow-[0_0px_5px_rgba(255,255,255)] active:ring-4 focus:ring-4" href="/">Go back to home</a>
+  </div>
+
+  <!-- scripts -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script>
+    var socket = io()
+    socket.on("user", (userCount) => {
+      $('.usercount').text(userCount)
+    })
+
+    navigator.mediaDevices.getUserMedia({
+      audio: true
+    }).then((stream) => {
+      const mediaRecorder = new MediaRecorder(stream)
+      var audioChunks = []
+      $('.microphone').on("click", (e) => {
+        if (mediaRecorder.state !== "recording") {
+          mediaRecorder.start()
+          $('.fa-microphone').toggleClass("fa-fade")
+          return stop()
+        }
+
+        if (mediaRecorder.state !== 'inactive') {
+          mediaRecorder.stop();
+          $('.fa-microphone').toggleClass("fa-fade");
+          return stop()
+        }
+      })
+
+      mediaRecorder.addEventListener("dataavailable", (event) => {
+        audioChunks.push(event.data)
+      })
+
+      mediaRecorder.addEventListener("stop", (event) => {
+        socket.emit("voiceChat", audioChunks)
+        audioChunks = []
+      })
+    })
+  </script>
+</body>
+
+</html>
